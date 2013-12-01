@@ -57,7 +57,7 @@ func c_doauto(fields []string) {
 		}
 		if labels[pos] != "" {		// if already defined as a different vector, concatenate the labels to make sure everything is represented
 			// TODO because this uses a map, it will not be in vector order
-			labels[pos] = labels[pos] + "_" + label
+			labels[pos] = labels[pos] + ":\n" + label
 		} else {
 			labels[pos] = label
 		}
