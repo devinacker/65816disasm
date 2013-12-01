@@ -16,14 +16,14 @@ func brk_immediate(pos uint32) (disassembled string, newpos uint32, done bool) {
 func clc_noarguments(pos uint32) (disassembled string, newpos uint32, done bool) {
 	env.carryflag.value = 0
 	env.carryflag.known = true
-	return fmt.Sprintf("clc"), pos, false
+	return fmt.Sprintf("clc\t"), pos, false
 }
 
 // sec
 func sec_noarguments(pos uint32) (disassembled string, newpos uint32, done bool) {
 	env.carryflag.value = 1
 	env.carryflag.known = true
-	return fmt.Sprintf("sec"), pos, false
+	return fmt.Sprintf("sec\t"), pos, false
 }
 
 // lda #nn
@@ -63,7 +63,7 @@ func sep_immediate(pos uint32) (disassembled string, newpos uint32, done bool) {
 
 // stp
 func stp_noarguments(pos uint32) (disassembled string, newpos uint32, done bool) {
-	return fmt.Sprintf("stp"), pos, true
+	return fmt.Sprintf("stp\t"), pos, true
 }
 
 // wdm #nn
@@ -77,7 +77,7 @@ func xba_noarguments(pos uint32) (disassembled string, newpos uint32, done bool)
 	low := byte(env.a.value & 0xFF)		// whether a is known is irrelevant
 	high := byte((env.a.value >> 8) & 0xFF)
 	env.a.value = (uint16(low) << 8) | uint16(high)
-	return fmt.Sprintf("xba"), pos, false
+	return fmt.Sprintf("xba\t"), pos, false
 }
 
 // xce
@@ -89,5 +89,5 @@ func xce_noarguments(pos uint32) (disassembled string, newpos uint32, done bool)
 	} else {
 		env.carryflag, env.e = env.e, env.carryflag
 	}
-	return fmt.Sprintf("xce"), pos, stop
+	return fmt.Sprintf("xce\t"), pos, stop
 }

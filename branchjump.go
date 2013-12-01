@@ -204,15 +204,15 @@ func jsr_absolutelong(pos uint32) (disassembled string, newpos uint32, done bool
 // rti
 // TODO for all of these: touch the stack?
 func rti_noarguments(pos uint32) (disassembled string, newpos uint32, done bool) {
-	return "rti", pos, true
+	return "rti\t", pos, true
 }
 
 // rtl
 func rtl_noarguments(pos uint32) (disassembled string, newpos uint32, done bool) {
-	return "rtl", pos, true
+	return "rtl\t", pos, true
 }
 
 // rts
 func rts_noarguments(pos uint32) (disassembled string, newpos uint32, done bool) {
-	return "rts", pos, true
+	return "rts\t", pos, true
 }

@@ -43,32 +43,32 @@ func pha_noarguments(pos uint32) (disassembled string, newpos uint32, done bool)
 			pushbyte(byte(env.a.value & 0xFF), env.a.known)
 		}
 	}
-	return fmt.Sprintf("pha"), pos, stop
+	return fmt.Sprintf("pha\t"), pos, stop
 }
 
 // phb
 func phb_noarguments(pos uint32) (disassembled string, newpos uint32, done bool) {
 	pushbyte(env.dbr.value, env.dbr.known)
-	return fmt.Sprintf("phb"), pos, false
+	return fmt.Sprintf("phb\t"), pos, false
 }
 
 // phd
 func phd_noarguments(pos uint32) (disassembled string, newpos uint32, done bool) {
 	pushword(env.direct.value, env.direct.known)
-	return fmt.Sprintf("phd"), pos, false
+	return fmt.Sprintf("phd\t"), pos, false
 }
 
 // phk
 func phk_noarguments(pos uint32) (disassembled string, newpos uint32, done bool) {
 	pushbyte(env.pbr, true)
-	return fmt.Sprintf("phk"), pos, false
+	return fmt.Sprintf("phk\t"), pos, false
 }
 
 // php
 func php_noarguments(pos uint32) (disassembled string, newpos uint32, done bool) {
 	p, err := getp()
 	pushbyte(p, err == nil)		// if there is an error, then make p unknown
-	return fmt.Sprintf("php"), pos, false
+	return fmt.Sprintf("php\t"), pos, false
 }
 
 // phx
@@ -84,7 +84,7 @@ func phx_noarguments(pos uint32) (disassembled string, newpos uint32, done bool)
 			pushbyte(0, false)
 		}
 	}
-	return fmt.Sprintf("phx"), pos, stop
+	return fmt.Sprintf("phx\t"), pos, stop
 }
 
 // phy
@@ -100,7 +100,7 @@ func phy_noarguments(pos uint32) (disassembled string, newpos uint32, done bool)
 			pushbyte(0, false)
 		}
 	}
-	return fmt.Sprintf("phy"), pos, stop
+	return fmt.Sprintf("phy\t"), pos, stop
 }
 
 // pla
@@ -118,26 +118,26 @@ func pla_noarguments(pos uint32) (disassembled string, newpos uint32, done bool)
 			env.a.known = k
 		}
 	}
-	return fmt.Sprintf("pla"), pos, stop
+	return fmt.Sprintf("pla\t"), pos, stop
 }
 
 // plb
 func plb_noarguments(pos uint32) (disassembled string, newpos uint32, done bool) {
 	env.dbr.value, env.dbr.known = popbyte()
-	return fmt.Sprintf("plb"), pos, false
+	return fmt.Sprintf("plb\t"), pos, false
 }
 
 // pld
 func pld_noarguments(pos uint32) (disassembled string, newpos uint32, done bool) {
 	env.direct.value, env.direct.known = popword()
-	return fmt.Sprintf("pld"), pos, false
+	return fmt.Sprintf("pld\t"), pos, false
 }
 
 // plp
 // TODO does this alter m and x in emulation mode?
 func plp_noarguments(pos uint32) (disassembled string, newpos uint32, done bool) {
 	setp(popbyte())
-	return fmt.Sprintf("plp"), pos, false
+	return fmt.Sprintf("plp\t"), pos, false
 }
 
 // plx
@@ -153,7 +153,7 @@ func plx_noarguments(pos uint32) (disassembled string, newpos uint32, done bool)
 			popbyte()
 		}
 	}
-	return fmt.Sprintf("plx"), pos, stop
+	return fmt.Sprintf("plx\t"), pos, stop
 }
 
 // ply
@@ -169,5 +169,5 @@ func ply_noarguments(pos uint32) (disassembled string, newpos uint32, done bool)
 			popbyte()
 		}
 	}
-	return fmt.Sprintf("ply"), pos, stop
+	return fmt.Sprintf("ply\t"), pos, stop
 }

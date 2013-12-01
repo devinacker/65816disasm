@@ -233,7 +233,7 @@ func op_noarguments(m string) opcode {
 		case "tsa", "txa", "tya":
 			makeAUnknown()
 		}
-		return fmt.Sprintf("%s", m), pos, false
+		return fmt.Sprintf("%s\t", m), pos, false
 	}
 }
 
