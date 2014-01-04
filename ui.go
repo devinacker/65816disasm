@@ -20,6 +20,7 @@ var commands = []struct {
 	{ "doauto", "auto-analyze vectors", c_doauto },		// TODO keep "vectors"?
 	{ "specialsub", "mark a subroutine as doing something special", c_specialsub },
 	{ "dowordptr", "mark a word as a pointer to code (with a pre-existing environment)", c_dowordptr },
+	{ "disasm", "disassemble code at a given location", c_disasm },
 }
 
 // the map key is a logical address
@@ -112,6 +113,85 @@ func c_dowordptr(fields []string) {
 		fmt.Fprintf(os.Stderr, "dowordptr error: no environment available for environment $%06X (from $%06X)\n", envaddr, addr)
 		return
 	}
+}
+
+func c_disasm(fields []string) {
+	if len(fields) == 0 {
+		fmt.Fprintf(os.Stderr, "disasm usage: dowordptr address [e=0/1/?] [m=0/1/?] [x=0/1/?] [c=0/1/?] [a=0/1/?] [dp=0000-ffff/?] [db=00-ff/?]\n")
+		return
+	}
+	
+	address, _ := strconv.ParseUint(fields[0], 16, 32)
+	
+	saved := saveenv()
+	env = newenv()
+	
+	for _, v := range fields[1:] {
+		split := strings.Split(v, "=")
+		if len(split) != 2 {
+			fmt.Fprintf(os.Stderr, "disasm: invalid parameter %s\n", v)
+			return
+		}
+		
+		reg, val := split[0], split[1]
+		
+		switch {
+		case reg == "e" && val == "?":
+			env.e.known = false
+		case reg == "e":
+			ival , _ := strconv.ParseUint(val, 16, 8)
+			env.e.value = uint8(ival)
+			env.e.known = true
+			
+		case reg == "m" && val == "?":
+			env.m.known = false
+		case reg == "m":
+			ival , _ := strconv.ParseUint(val, 16, 8)
+			env.m.value = uint8(ival)
+			env.m.known = true
+			
+		case reg == "x" && val == "?":
+			env.x.known = false
+		case reg == "x":
+			ival , _ := strconv.ParseUint(val, 16, 8)
+			env.x.value = uint8(ival)
+			env.x.known = true
+			
+		case reg == "c" && val == "?":
+			env.carryflag.known = false
+		case reg == "c":
+			ival , _ := strconv.ParseUint(val, 16, 8)
+			env.carryflag.value = uint8(ival)
+			env.carryflag.known = true
+			
+		case reg == "a" && val == "?":
+			env.a.known = false
+		case reg == "a":
+			ival , _ := strconv.ParseUint(val, 16, 16)
+			env.a.value = uint16(ival)
+			env.a.known = true
+			
+		case reg == "dp" && val == "?":
+			env.direct.known = false
+		case reg == "dp":
+			ival , _ := strconv.ParseUint(val, 16, 16)
+			env.direct.value = uint16(ival)
+			env.direct.known = true
+			
+		case reg == "db" && val == "?":
+			env.dbr.known = false
+		case reg == "db":
+			ival , _ := strconv.ParseUint(val, 16, 8)
+			env.dbr.value = uint8(ival)
+			env.dbr.known = true
+		}
+	}
+	
+	logical, _ := memmap.Logical(uint32(address))
+	env.pbr = uint8(logical >> 16)
+	mklabel(uint32(address), "sub", lpSub)
+	disassemble(uint32(address))
+	restoreenv(saved)
 }
 
 var helptext string
