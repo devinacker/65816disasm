@@ -117,7 +117,7 @@ func c_dowordptr(fields []string) {
 
 func c_disasm(fields []string) {
 	if len(fields) == 0 {
-		fmt.Fprintf(os.Stderr, "disasm usage: dowordptr address [e=0/1/?] [m=0/1/?] [x=0/1/?] [c=0/1/?] [a=0/1/?] [dp=0000-ffff/?] [db=00-ff/?]\n")
+		fmt.Fprintf(os.Stderr, "disasm usage: dowordptr address [e=0/1/?] [m=0/1/?] [x=0/1/?] [c=0/1/?] [a=0000-ffff/?] [dp=0000-ffff/?] [db=00-ff/?]\n")
 		return
 	}
 	
